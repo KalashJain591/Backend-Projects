@@ -27,8 +27,16 @@ app.get("/signup",(req,res)=>{
 app.post("/signup",async (req,res)=>{
   const data={
     name:req.body.name,
-    password:req.body.password
+    password:req.body.password,
+    password2:req.body.password2
   }
+  if(data.password!=data.password2)
+  res.status(400).send("Passwords are not matching");
+  const t=await collection.findOne({name:data.name});
+  if(t)
+  res.status(400).send("A User already exits with this name ");
+
+
   await collection.insertMany([data]);
   res.render("home");
 
